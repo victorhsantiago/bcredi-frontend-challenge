@@ -1,5 +1,5 @@
 <template>
-  <form class="signup-form">
+  <form class="signup-form" @submit.prevent>
     <div class="signup-form__header">
       <h1 class="signup-form__header__title">Criar meu cadastro</h1>
       <p class="signup-form__header__description">
@@ -7,23 +7,41 @@
         CPF.
       </p>
     </div>
+
     <div class="signup-form__field">
       <label class="signup-form__field__label" for="email-input">E-mail</label>
       <input
         id="email-input"
         class="signup-form__field__input"
+        :class="emailError && 'signup-form__field__input--error'"
         type="email"
         placeholder="ana.maria@email.com"
+        required
+        v-model="email"
+        @blur="validateEmail"
       />
+      <span v-if="emailError" class="signup-form__field__error">{{
+        emailError
+      }}</span>
     </div>
+
     <div class="signup-form__field">
       <label class="signup-form__field__label" for="cpf-input">CPF</label>
       <input
         id="cpf-input"
         class="signup-form__field__input"
+        :class="cpfError && 'signup-form__field__input--error'"
         placeholder="000.000.000-00"
+        required
+        v-model="cpf"
+        v-mask="'###.###.###-##'"
+        @blur="validateCPF"
       />
+      <span v-if="cpfError" class="signup-form__field__error">{{
+        cpfError
+      }}</span>
     </div>
+
     <div class="signup-form__field">
       <label class="signup-form__field__label" for="birthdate-input"
         >Data de nascimento</label
@@ -31,9 +49,18 @@
       <input
         id="birthdate-input"
         class="signup-form__field__input"
+        :class="birthdateError && 'signup-form__field__input--error'"
         placeholder="DD/MM/AAAA"
+        v-mask="'##/##/####'"
+        required
+        v-model="birthdate"
+        @blur="validateBirthdate"
       />
+      <span v-if="birthdateError" class="signup-form__field__error">{{
+        birthdateError
+      }}</span>
     </div>
+
     <div class="signup-form__field">
       <label class="signup-form__field__label" for="password-input"
         >Senha</label
@@ -42,17 +69,32 @@
         id="password-input"
         type="password"
         class="signup-form__field__input"
+        :class="passwordError && 'signup-form__field__input--error'"
         placeholder="Cadastre uma senha"
+        required
+        v-model="password"
+        @blur="validatePassword"
       />
+      <span v-if="passwordError" class="signup-form__field__error">{{
+        passwordError
+      }}</span>
     </div>
+
     <div class="signup-form__terms">
-      <input class="signup-form__terms__checkbox" type="checkbox" />
+      <input
+        class="signup-form__terms__checkbox"
+        type="checkbox"
+        :checked="acceptTerms"
+        @click="toggleAcceptTerms"
+      />
       <p class="signup-form__terms__disclaimer">
         Li e estou de acordo com a <span>Política de Privacidade</span> e a
         <span>Política de Uso de Informações</span>.
       </p>
     </div>
-    <button class="signup-form__submit">Cadastrar</button>
+
+    <button class="signup-form__submit" @click="submitForm()">Cadastrar</button>
+
     <div class="signup-form__footer">
       <p class="signup-form__footer__text">
         Já fiz meu cadastro. <span>Entrar agora.</span>
@@ -62,8 +104,91 @@
 </template>
 
 <script>
+import { isValid as cpfValidator } from '@fnando/cpf';
+import {
+  emailValidator,
+  dateValidator,
+  passwordValidator,
+} from '@/utils/validators';
+
 export default {
   name: 'SignupForm',
+  data() {
+    return {
+      email: '',
+      emailError: '',
+      cpf: '',
+      cpfError: '',
+      birthdate: '',
+      birthdateError: '',
+      password: '',
+      passwordError: '',
+      acceptTerms: false,
+    };
+  },
+  methods: {
+    validateField({
+      field,
+      fieldError,
+      missingFieldMsg,
+      invalidFieldMsg,
+      validationFunction,
+    }) {
+      const validateField = validationFunction(this[field]);
+
+      if (!this[field]) {
+        this[fieldError] = missingFieldMsg;
+        return false;
+      }
+
+      if (!validateField) {
+        this[fieldError] = invalidFieldMsg;
+        return false;
+      }
+
+      this[fieldError] = '';
+      return true;
+    },
+    validateEmail() {
+      return this.validateField({
+        field: 'email',
+        fieldError: 'emailError',
+        missingFieldMsg: 'O campo e-mail é obrigarório',
+        invalidFieldMsg: 'E-mail inválido',
+        validationFunction: emailValidator,
+      });
+    },
+    validateCPF() {
+      return this.validateField({
+        field: 'cpf',
+        fieldError: 'cpfError',
+        missingFieldMsg: 'O campo CPF é obrigarório',
+        invalidFieldMsg: 'CPF inválido',
+        validationFunction: cpfValidator,
+      });
+    },
+    validateBirthdate() {
+      return this.validateField({
+        field: 'birthdate',
+        fieldError: 'birthdateError',
+        missingFieldMsg: 'O campo data de nascimento é obrigarório',
+        invalidFieldMsg: 'Data inválida',
+        validationFunction: dateValidator,
+      });
+    },
+    validatePassword() {
+      return this.validateField({
+        field: 'password',
+        fieldError: 'passwordError',
+        missingFieldMsg: 'O campo senha é obrigarório',
+        invalidFieldMsg: 'Senha inválida, mínimo de 8 caracteres',
+        validationFunction: passwordValidator,
+      });
+    },
+    toggleAcceptTerms() {
+      this.acceptTerms = !this.acceptTerms;
+    },
+  },
 };
 </script>
 
@@ -89,6 +214,7 @@ export default {
   &__field {
     display: flex;
     flex-direction: column;
+    position: relative;
 
     &__label {
       font-size: 14px;
@@ -107,7 +233,23 @@ export default {
 
       &::placeholder {
         color: $pinkish-grey;
+        letter-spacing: normal;
       }
+
+      &[type='password'] {
+        letter-spacing: 4px;
+      }
+
+      &--error {
+        border-color: $coral-pink;
+      }
+    }
+
+    &__error {
+      position: absolute;
+      bottom: -24px;
+      font-size: 14px;
+      color: $coral-pink;
     }
   }
 

@@ -64,6 +64,7 @@ input,
 button,
 textarea,
 select {
+  outline: none;
   font: inherit;
 }
 

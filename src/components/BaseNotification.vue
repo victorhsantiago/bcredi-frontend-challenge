@@ -25,9 +25,7 @@ export default {
 .notification {
   width: 100%;
   height: 64px;
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,11 +33,15 @@ export default {
   z-index: 2;
   visibility: hidden;
   opacity: 0;
-  transition: all 0.1s ease-in;
+  transition: opacity 0.1s ease-in, visibility 0.1s ease-in;
 
   &--open{
     visibility: visible;
     opacity: 1;
+  }
+
+  @media screen and (min-width: 600px) {
+      width: 60%;
   }
 
   &__text {

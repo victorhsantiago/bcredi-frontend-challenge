@@ -4,7 +4,6 @@
       <img class="signup__header__logo" src="@/assets/svg/logo.svg" alt="" />
     </header>
     <SignupForm @notification="triggerShowNotification" />
-    <button @click="toggleNotification">show!</button>
     <BaseNotification :show-notification="showNotification"/>
   </div>
 </template>

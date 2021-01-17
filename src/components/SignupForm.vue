@@ -233,6 +233,7 @@ export default {
     submitForm() {
       if (!this.validateForm()) return;
 
+      this.$emit('notification');
       this.resetForm();
     },
     resetForm() {

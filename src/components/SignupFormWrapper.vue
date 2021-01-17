@@ -3,7 +3,9 @@
     <header class="signup__header">
       <img class="signup__header__logo" src="@/assets/svg/logo.svg" alt="" />
     </header>
-    <SignupForm />
+    <SignupForm @notification="triggerShowNotification" />
+    <button @click="toggleNotification">show!</button>
+    <BaseNotification :show-notification="showNotification"/>
   </div>
 </template>
 
@@ -12,6 +14,22 @@ export default {
   name: 'SignupFormWrapper',
   components: {
     SignupForm: () => import('@/components/SignupForm.vue'),
+    BaseNotification: () => import('@/components/BaseNotification.vue'),
+  },
+  data() {
+    return {
+      showNotification: false,
+    };
+  },
+  methods: {
+    toggleNotification() {
+      this.showNotification = !this.showNotification;
+    },
+    triggerShowNotification() {
+      this.toggleNotification();
+
+      setTimeout(() => this.toggleNotification(), 3000);
+    },
   },
 };
 </script>
@@ -24,6 +42,7 @@ export default {
   flex-direction: column;
   align-items: center;
   overflow-y: auto;
+  position: relative;
 
   &__header {
     position: sticky;

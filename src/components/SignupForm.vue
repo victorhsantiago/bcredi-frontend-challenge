@@ -67,14 +67,20 @@
       >
       <input
         id="password-input"
-        type="password"
+        :type="passwordVisible ? 'text' : 'password'"
         class="signup-form__field__input"
         :class="passwordError && 'signup-form__field__input--error'"
         placeholder="Cadastre uma senha"
         required
         v-model="password"
         @blur="validatePassword"
-      />
+      >
+      <img
+        class="signup-form__field__icon"
+        src="@/assets/svg/eye.svg"
+        alt="Ícone de visibilidade"
+        @click="togglePasswordVisibility"
+      >
       <span v-if="passwordError" class="signup-form__field__error">{{
         passwordError
       }}</span>
@@ -97,7 +103,9 @@
       }}</span>
     </div>
 
-    <button class="signup-form__submit" @click="submitForm()">Cadastrar</button>
+    <button class="signup-form__submit" @click="submitForm()">
+      <img class="signup-form__submit__icon" src="@/assets/svg/lock.svg" /> Cadastrar
+    </button>
 
     <div class="signup-form__footer">
       <p class="signup-form__footer__text">
@@ -130,9 +138,13 @@ export default {
       passwordError: '',
       acceptTerms: false,
       acceptTermsError: '',
+      passwordVisible: false,
     };
   },
   methods: {
+    togglePasswordVisibility() {
+      this.passwordVisible = !this.passwordVisible;
+    },
     toggleAcceptTerms() {
       this.acceptTerms = !this.acceptTerms;
     },
@@ -282,11 +294,21 @@ export default {
 
       &[type='password'] {
         letter-spacing: 4px;
+        padding-right: 40px;
       }
 
       &--error {
         border-color: $coral-pink;
       }
+    }
+
+    &__icon {
+      position: absolute;
+      bottom: 28px;
+      right: 16px;
+      transform: translateY(50%);
+      height: 12px;
+      cursor: pointer;
     }
 
     &__error {
@@ -353,12 +375,22 @@ export default {
   &__submit {
     width: 100%;
     height: 56px;
+    position: relative;
     border-radius: 3px;
     font-weight: bold;
     color: white;
     background-color: $dodger-blue;
     border: none;
     margin-bottom: 44px;
+    cursor: pointer;
+
+    &__icon {
+      position: absolute;
+      top: 50%;
+      left: 32px;
+      transform: translateY(-50%);
+      height: 12px;
+    }
   }
 
   &__footer {

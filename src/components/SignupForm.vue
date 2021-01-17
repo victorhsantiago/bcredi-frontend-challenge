@@ -174,7 +174,7 @@ export default {
       return this.validateField({
         field: 'email',
         fieldError: 'emailError',
-        missingFieldMsg: 'O campo e-mail é obrigarório',
+        missingFieldMsg: 'Preencha o e-mail',
         invalidFieldMsg: 'E-mail inválido',
         validationFunction: emailValidator,
       });
@@ -183,7 +183,7 @@ export default {
       return this.validateField({
         field: 'cpf',
         fieldError: 'cpfError',
-        missingFieldMsg: 'O campo CPF é obrigarório',
+        missingFieldMsg: 'Preencha o CPF',
         invalidFieldMsg: 'CPF inválido',
         validationFunction: cpfValidator,
       });
@@ -192,7 +192,7 @@ export default {
       return this.validateField({
         field: 'birthdate',
         fieldError: 'birthdateError',
-        missingFieldMsg: 'O campo data de nascimento é obrigarório',
+        missingFieldMsg: 'Preencha a data de nascimento',
         invalidFieldMsg: 'Data inválida',
         validationFunction: dateValidator,
       });
@@ -201,7 +201,7 @@ export default {
       return this.validateField({
         field: 'password',
         fieldError: 'passwordError',
-        missingFieldMsg: 'O campo senha é obrigarório',
+        missingFieldMsg: 'Preencha uma senha',
         invalidFieldMsg: 'Senha inválida, mínimo de 8 caracteres',
         validationFunction: passwordValidator,
       });
@@ -245,6 +245,7 @@ export default {
       this.password = '';
       this.passwordError = '';
       this.acceptTerms = false;
+      this.passwordVisible = false;
     },
   },
 };
@@ -252,11 +253,54 @@ export default {
 
 <style lang="scss" scoped>
 .signup-form {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 36px;
+  grid-auto-rows: minmax(min-content, max-content);
+  max-width: 360px;
+  padding: 36px 24px 0;
+
+  @media screen and (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 36px 20px 0;
+
+      & div:nth-child(1) {
+        grid-column: 1/3;
+      }
+
+      & div:nth-child(2) {
+        grid-column: 1/3;
+      }
+
+      & div:nth-child(3) {
+        grid-column: 1/2;
+      }
+
+      & div:nth-child(4) {
+        grid-column: 2/3;
+      }
+
+      & div:nth-child(5) {
+        grid-column: 1/3;
+      }
+
+      & div:nth-child(6) {
+        grid-column: 1/3;
+      }
+
+      & button:nth-child(7) {
+        grid-column: 1/3;
+      }
+
+      & div:nth-child(8) {
+        grid-column: 1/3;
+      }
+  }
 
   &__header {
+    @media screen and (min-width: 600px) {
+      text-align: center;
+    }
+
     &__title {
       font-size: 24px;
       font-weight: bold;
@@ -318,6 +362,7 @@ export default {
       bottom: -24px;
       font-size: 14px;
       color: $coral-pink;
+      white-space: nowrap;
     }
   }
 
@@ -385,6 +430,7 @@ export default {
     border: none;
     margin-bottom: 44px;
     cursor: pointer;
+    flex-shrink: 0;
 
     &__icon {
       position: absolute;

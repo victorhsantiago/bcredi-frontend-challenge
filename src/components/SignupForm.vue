@@ -1,5 +1,5 @@
 <template>
-  <form class="signup-form" @submit.prevent>
+  <form class="signup-form" novalidate @submit.prevent>
     <div class="signup-form__header">
       <h1 class="signup-form__header__title">Criar meu cadastro</h1>
       <p class="signup-form__header__description">
@@ -187,6 +187,35 @@ export default {
     },
     toggleAcceptTerms() {
       this.acceptTerms = !this.acceptTerms;
+    },
+    validateForm() {
+      const emailValidation = this.validateEmail();
+      const CPFValidation = this.validateCPF();
+      const birthdateValidation = this.validateBirthdate();
+      const passwordValidation = this.validatePassword();
+      const termsAccepted = this.acceptTerms;
+
+      return emailValidation
+        && CPFValidation
+        && birthdateValidation
+        && passwordValidation
+        && termsAccepted;
+    },
+    submitForm() {
+      if (!this.validateForm()) return;
+
+      this.resetForm();
+    },
+    resetForm() {
+      this.email = '';
+      this.emailError = '';
+      this.cpf = '';
+      this.cpfError = '';
+      this.birthdate = '';
+      this.birthdateError = '';
+      this.password = '';
+      this.passwordError = '';
+      this.acceptTerms = false;
     },
   },
 };

@@ -74,19 +74,22 @@
         required
         v-model="password"
         @blur="validatePassword"
-      >
+      />
       <img
         class="signup-form__field__icon"
         src="@/assets/svg/eye.svg"
         alt="Ícone de visibilidade"
         @click="togglePasswordVisibility"
-      >
+      />
       <span v-if="passwordError" class="signup-form__field__error">{{
         passwordError
       }}</span>
     </div>
 
-    <div class="signup-form__terms" :class="acceptTermsError && 'signup-form__terms--error'">
+    <div
+      class="signup-form__terms"
+      :class="acceptTermsError && 'signup-form__terms--error'"
+    >
       <input
         class="signup-form__terms__checkbox"
         type="checkbox"
@@ -104,7 +107,8 @@
     </div>
 
     <button class="signup-form__submit" @click="submitForm()">
-      <img class="signup-form__submit__icon" src="@/assets/svg/lock.svg" /> Cadastrar
+      <img class="signup-form__submit__icon" src="@/assets/svg/lock.svg" />
+      Cadastrar
     </button>
 
     <div class="signup-form__footer">
@@ -149,11 +153,7 @@ export default {
       this.acceptTerms = !this.acceptTerms;
     },
     validateField({
-      field,
-      fieldError,
-      missingFieldMsg,
-      invalidFieldMsg,
-      validationFunction,
+      field, fieldError, missingFieldMsg, invalidFieldMsg, validationFunction,
     }) {
       const validateField = validationFunction(this[field]);
 
@@ -222,11 +222,13 @@ export default {
       const passwordValidation = this.validatePassword();
       const termsAccepted = this.validateAcceptTerms();
 
-      return emailValidation
+      return (
+        emailValidation
         && CPFValidation
         && birthdateValidation
         && passwordValidation
-        && termsAccepted;
+        && termsAccepted
+      );
     },
     submitForm() {
       if (!this.validateForm()) return;

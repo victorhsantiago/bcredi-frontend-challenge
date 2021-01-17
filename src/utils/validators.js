@@ -1,8 +1,6 @@
 import { isValid, parse } from 'date-fns';
 
-export const emailValidator = (email) => /^([\w\d._\-#])+@([\w\d._\-#]+[.][\w\d._\-#]+)+$/.test(
-  email,
-);
+export const emailValidator = (email) => /^([\w\d._\-#])+@([\w\d._\-#]+[.][\w\d._\-#]+)+$/.test(email);
 
 export const dateValidator = (date) => {
   const parsedDate = parse(date, 'dd/MM/yyyy', new Date());

@@ -80,17 +80,21 @@
       }}</span>
     </div>
 
-    <div class="signup-form__terms">
+    <div class="signup-form__terms" :class="acceptTermsError && 'signup-form__terms--error'">
       <input
         class="signup-form__terms__checkbox"
         type="checkbox"
         :checked="acceptTerms"
         @click="toggleAcceptTerms"
+        @change="validateAcceptTerms"
       />
       <p class="signup-form__terms__disclaimer">
         Li e estou de acordo com a <span>Política de Privacidade</span> e a
         <span>Política de Uso de Informações</span>.
       </p>
+      <span v-if="acceptTermsError" class="signup-form__terms__error">{{
+        acceptTermsError
+      }}</span>
     </div>
 
     <button class="signup-form__submit" @click="submitForm()">Cadastrar</button>
@@ -109,6 +113,7 @@ import {
   emailValidator,
   dateValidator,
   passwordValidator,
+  termsValidator,
 } from '@/utils/validators';
 
 export default {
@@ -124,9 +129,13 @@ export default {
       password: '',
       passwordError: '',
       acceptTerms: false,
+      acceptTermsError: '',
     };
   },
   methods: {
+    toggleAcceptTerms() {
+      this.acceptTerms = !this.acceptTerms;
+    },
     validateField({
       field,
       fieldError,
@@ -185,15 +194,21 @@ export default {
         validationFunction: passwordValidator,
       });
     },
-    toggleAcceptTerms() {
-      this.acceptTerms = !this.acceptTerms;
+    validateAcceptTerms() {
+      return this.validateField({
+        field: 'acceptTerms',
+        fieldError: 'acceptTermsError',
+        missingFieldMsg: 'Aceite nossas políticas para continuar',
+        invalidFieldMsg: 'Aceite nossas políticas para continuar',
+        validationFunction: termsValidator,
+      });
     },
     validateForm() {
       const emailValidation = this.validateEmail();
       const CPFValidation = this.validateCPF();
       const birthdateValidation = this.validateBirthdate();
       const passwordValidation = this.validatePassword();
-      const termsAccepted = this.acceptTerms;
+      const termsAccepted = this.validateAcceptTerms();
 
       return emailValidation
         && CPFValidation
@@ -284,6 +299,7 @@ export default {
 
   &__terms {
     display: grid;
+    position: relative;
     grid-template-columns: 56px auto;
     align-items: center;
     padding: 16px 0;
@@ -320,6 +336,17 @@ export default {
       & span {
         color: $dodger-blue;
       }
+    }
+
+    &__error {
+      position: absolute;
+      bottom: -24px;
+      font-size: 14px;
+      color: $coral-pink;
+    }
+
+    &--error {
+      border-color: $coral-pink;
     }
   }
 

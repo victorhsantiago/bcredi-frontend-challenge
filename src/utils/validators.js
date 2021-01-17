@@ -10,3 +10,5 @@ export const dateValidator = (date) => {
 };
 
 export const passwordValidator = (password) => password.length >= 8;
+
+export const termsValidator = (terms) => Boolean(terms);

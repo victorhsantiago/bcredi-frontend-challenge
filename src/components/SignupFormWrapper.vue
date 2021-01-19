@@ -1,7 +1,7 @@
 <template>
-  <div class="signup">
-    <header class="signup__header">
-      <img class="signup__header__logo" src="@/assets/svg/logo.svg" alt="" />
+  <div class="signup-wrapper">
+    <header class="signup-wrapper__header">
+      <img class="signup-wrapper__header__logo" src="@/assets/svg/logo.svg" alt="" />
     </header>
     <SignupForm @notification="triggerShowNotification" />
     <BaseNotification :show-notification="showNotification"/>
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.signup {
+.signup-wrapper {
   width: 100%;
   height: 100vh;
   display: flex;

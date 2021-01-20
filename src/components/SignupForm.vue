@@ -91,10 +91,10 @@
       :class="acceptTermsError && 'signup-form__terms--error'"
     >
       <input
+        id="accept-terms-checkbox"
         class="signup-form__terms__checkbox"
         type="checkbox"
-        :checked="acceptTerms"
-        @click="toggleAcceptTerms"
+        v-model="acceptTerms"
         @change="validateAcceptTerms"
       />
       <p class="signup-form__terms__disclaimer">
@@ -148,9 +148,6 @@ export default {
   methods: {
     togglePasswordVisibility() {
       this.passwordVisible = !this.passwordVisible;
-    },
-    toggleAcceptTerms() {
-      this.acceptTerms = !this.acceptTerms;
     },
     validateField({
       field, fieldError, missingFieldMsg, invalidFieldMsg, validationFunction,

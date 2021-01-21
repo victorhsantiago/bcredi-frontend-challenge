@@ -1,8 +1,17 @@
 <template>
   <div id="app">
-    <router-view />
+    <Signup />
   </div>
 </template>
+
+<script>
+export default {
+  name: 'App',
+  components: {
+    Signup: () => import('@/views/Signup.vue'),
+  },
+};
+</script>
 
 <style lang="scss">
 </style>

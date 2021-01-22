@@ -29,7 +29,7 @@ cd victorhsantiago/bcredi-frontend-challenge
 # Install its dependencies
 yarn
 
-# Get a cup of watter #hydrateYourself
+# Get a cup of water #hydrateYourself
 
 # Start the development mode
 yarn serve
